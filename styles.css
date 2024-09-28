@@ -1,17 +1,29 @@
+/* Added variables for style
+colors to more easily adjust
+colors on the fly */
+
+:root {
+    --blueprimary: #007bff;
+    --lightbackground: #f0f8ff;
+    --white: #FFF;
+    --darkfont: #333;
+    --hovercolor: #ccc;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
-    color: #333;
+    background-color: var(--lightbackground);
+    color: var(--darkfont);
 }
 
 header {
-    background-color: #007bff;
+    background-color: var(--blueprimary);
     padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: var(--white);
 }
 
 .header-content {
@@ -36,7 +48,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: white;
+    color: var(--white);
     text-decoration: none;
     font-weight: bold;
 }
@@ -46,12 +58,12 @@ nav ul li a:hover {
 }
 
 .settings-icon {
-    color: white;
+    color: var(--white);
     font-size: 1.5rem;
 }
 
 .settings-icon:hover {
-    color: #ccc;
+    color: var(--hovercolor);
 }
 
 main {
@@ -64,9 +76,9 @@ main {
 }
 
 .card {
-    background-color: white;
+    background-color: var(--white);
     padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0.2rem;
+    box-shadow: 0 0.1rem 0.2rem var(--darkfont);
     width: 45%;
 }
