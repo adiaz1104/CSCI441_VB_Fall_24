@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CheckedOff - Calendar</title>
+    <!-- Link to the CSS file for styling -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Link to Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Link to FullCalendar CSS for calendar styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css">
 </head>
 <body>
@@ -22,16 +25,30 @@
                     <li><a href="documentation.html">Documentation</a></li>
                 </ul>
             </nav>
+            <!-- Settings icon -->
             <a href="settings.html" class="settings-icon"><i class="fas fa-cog"></i></a>
         </div>
     </header>
     <main>
+        <!-- Filter section for user selection -->
+        <div class="filter">
+            <label for="user-filter">Filter by user:</label>
+            <select id="user-filter" onchange="filterByUser()">
+                <option value="">All</option>
+                <option value="adam">Adam</option>
+                <option value="tara">Tara</option>
+                <option value="jake">Jake</option>
+                <option value="dylan">Dylan</option>
+                <!-- Placeholder for dynamic user options from the database -->
+            </select>
+        </div>
         <section class="calendar">
             <h2>Calendar</h2>
+            <!-- Calendar container -->
             <div id="calendar"></div>
         </section>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.js"></script>
-    <script src="components/calendar.js"></script>
+    
 </body>
 </html>
+

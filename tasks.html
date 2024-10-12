@@ -25,12 +25,28 @@
         </div>
     </header>
     <main>
+        <!-- Filter section for user selection -->
+        <div class="filter">
+            <label for="user-filter">Filter by user:</label>
+            <select id="user-filter">
+                <option value="">All</option>
+                <option value="adam">Adam</option>
+                <option value="tara">Tara</option>
+                <option value="jake">Jake</option>
+                <option value="dylan">Dylan</option>
+                <!-- Placeholder for dynamic user options from the database -->
+            </select>
+            <!-- Placeholder button for adding a new task -->
+            <button id="add-new-task">Add New Task</button>
+        </div>
         <section class="task-list">
             <h2>Task List</h2>
             <ul>
                 <!-- Example tasks -->
-                <li>Task 1 - Assigned to John - Due Date: 2024-09-17</li>
-                <li>Task 2 - Assigned to Jane - Due Date: 2024-09-18</li>
+                <li>Adam: Mov Lawn - Due Date: 2024-10-05</li>
+                <li>Tara: Mail Package - Due Date: 2024-10-05</li>
+                <li>Jake: Clean Kitchen - Due Date: 2024-10-06</li>
+                <li>Dylan: Submit Scholarship Application - Due Date: 2024-10-12</li>
             </ul>
         </section>
     </main>

@@ -1,7 +1,4 @@
-/* Added variables for style
-colors to more easily adjust
-colors on the fly */
-
+/* Added variables for style colors to more easily adjust colors on the fly */
 :root {
     --blueprimary: #007bff;
     --lightbackground: #f0f8ff;
@@ -70,9 +67,28 @@ main {
     padding: 2rem;
 }
 
+/* Styling for the filter section */
+.filter {
+    margin-bottom: 1rem;
+}
+
+.filter label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.filter select {
+    padding: 0.5rem;
+    border: 1px solid var(--blueprimary);
+    border-radius: 0.2rem;
+    background-color: var(--white);
+    color: var(--darkfont);
+}
+
 .summary {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;  /* Allows items to wrap to the next line */
 }
 
 .card {
@@ -81,4 +97,47 @@ main {
     border-radius: 0.2rem;
     box-shadow: 0 0.1rem 0.2rem var(--darkfont);
     width: 45%;
+    margin-top: 1rem; /* Adds space between rows */
+}
+
+
+/*Styling for the "add new" buttons*/
+#add-new-task, 
+#add-new-shopping-item {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--blueprimary);
+    color: var(--white);
+    border: none;
+    border-radius: 0.2rem;
+    cursor: pointer;
+}
+#add-new-task:hover,
+#add-new-shopping-item:hover  {
+    background-color: var(--hovercolor);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+
+    .summary {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CheckedOff</title>
+    <!--Link to the CSS file for styling-->
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <!--Link to Font Awesome for icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -21,28 +23,45 @@
                     <li><a href="documentation.html">Documentation</a></li>
                 </ul>
             </nav>
+            <!--Settings icon-->
             <a href="settings.html" class="settings-icon"><i class="fas fa-cog"></i></a>
         </div>
     </header>
     <main>
-        <section class="summary">
+        <!--Filter dropdown for users-->
+        <div class="filter">
+            <label for="user-filter">Filter by user</label>
+            <select id="user-filter" onchange="filterByUser()">
+                <!--Placeholder for dynamic user options from the database-->
+                <option value="">All</option>
+                <option value="adam">Adam</option>
+                <option value="tara">Tara</option>
+                <option value="jake">Jake</option>
+                <option vlaue="dylan">Dylan</option>
+            </select>
+        </div>
+        <section class="summary"></section>
+            <!--Task list summary section-->
             <div class="card">
                 <h3>Tasks Due Today</h3>
-                <ul>
-                    <!-- Example tasks -->
-                    <li>Task 1 - Assigned to John</li>
-                    <li>Task 2 - Assigned to Jane</li>
+                <ul id="tasks-list">
+                    <!--Example tasks as placeholder for dynamic tasks-->
+                    <li>Adam: Mow lawn</li>
+                    <li>Tara: Mail package</li>
                 </ul>
             </div>
+            <!--Events list section summary-->
             <div class="card">
                 <h3>Events Today</h3>
-                <ul>
-                    <!-- Example events -->
-                    <li>Event 1 - 10:00 AM</li>
-                    <li>Event 2 - 2:00 PM</li>
+                <ul id="events-lists">
+                    <!-- Example events as placeholder for dynamic events -->
+                    <li>Jake: Dr Appt - 10:00 AM</li>
+                    <li>Dylan: Football Practice - 2:00 PM</li>
                 </ul>
             </div>
         </section>
     </main>
+    <!--Link to the JS file-->
+    <script src="index.js"></script>
 </body>
 </html>
