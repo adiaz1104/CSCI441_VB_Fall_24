@@ -75,6 +75,17 @@ main {
     padding: 2rem;
 }
 
+.calendar {
+    margin-top: 20px;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 0 auto; /* Center the calendar */
+    padding: 10px;
+    height: 600px; /* Set a fixed height */
+}
+
 /* Styling for the filter section */
 .filter {
     margin-bottom: 1rem;
