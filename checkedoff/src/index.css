@@ -1,0 +1,14 @@
+:root {
+  --blueprimary: #007bff;
+  --lightbackground: #f0f8ff;
+  --white: #FFF;
+  --darkfont: #333;
+  --hovercolor: #ccc;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--lightbackground);
+  color: var(--darkfont);
+}

@@ -1,0 +1,12 @@
+{
+  "name": "csci441_vb_fall_24",
+  "version": "1.0.0",
+  "description": "CheckedOff is a comprehensive web application designed to streamline family life in today's fast-paced world. It offers a suite of powerful features to help families of all shapes and sizes stay organized, connected, and in sync.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
