@@ -76,25 +76,28 @@ CREATE TABLE Reminder (
 
 -- Add foreign key constraints
 ALTER TABLE Calendar
-ADD CONSTRAINT fk_calendar_owner
+ADD CONSTRAINT fk_calendar_owner_user
 FOREIGN KEY (owner_id) 
-REFERENCES "User"(id) 
-WHEN (owner_type = 'User');
+REFERENCES "User"(id);
 
 ALTER TABLE Calendar
-ADD CONSTRAINT fk_calendar_family
+ADD CONSTRAINT fk_calendar_owner_family
 FOREIGN KEY (owner_id) 
-REFERENCES Family(id) 
-WHEN (owner_type = 'Family');
+REFERENCES Family(id);
 
-ALTER TABLE Reminder
-ADD CONSTRAINT fk_reminder_event
-FOREIGN KEY (related_id) 
-REFERENCES Event(id) 
-WHEN (related_type = 'Event');
+-- Create partial indexes to enforce the conditional foreign key constraints
+CREATE INDEX idx_calendar_owner_user
+ON Calendar(owner_id)
+WHERE owner_type = 'User';
 
-ALTER TABLE Reminder
-ADD CONSTRAINT fk_reminder_task
-FOREIGN KEY (related_id) 
-REFERENCES Task(id) 
-WHEN (related_type = 'Task');
+CREATE INDEX idx_calendar_owner_family
+ON Calendar(owner_id)
+WHERE owner_type = 'Family';
+
+CREATE INDEX idx_reminder_event
+ON Reminder(related_id)
+WHERE related_type = 'Event';
+
+CREATE INDEX idx_reminder_task
+ON Reminder(related_id)
+WHERE related_type = 'Task';
