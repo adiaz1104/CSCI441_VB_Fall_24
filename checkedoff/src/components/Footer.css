@@ -1,0 +1,27 @@
+.footer {
+    color: var(--blueprimary);
+    padding: 0.5rem;
+    position: fixed;
+    text-align: center;
+    z-index: -1;   /* Sets the footer to the background so that content can be scrolled above it */
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer-link {
+    color: var(--blueprimary);
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 0.2rem;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }

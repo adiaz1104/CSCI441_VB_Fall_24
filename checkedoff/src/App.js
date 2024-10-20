@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Main from './components/Main';
 import Tasks from './components/Tasks';
 import Calendar from './components/Calendar';
@@ -27,6 +28,7 @@ const App = () => (
       <Route path="/documents" element={<Documents />} />
 
     </Routes>
+    <Footer />
   </div>
 );
 
