@@ -8,6 +8,7 @@ import Calendar from './components/Calendar';
 import Recipes from './components/Recipes';
 import Shopping from './components/Shopping';
 import Documents from './components/Documents';
+import Signup from './components/Signup';
 import './App.css';
 
 // Main App component containing routes for different pages
@@ -26,7 +27,7 @@ const App = () => (
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/shopping" element={<Shopping />} />
       <Route path="/documents" element={<Documents />} />
-
+      <Route path="/signup" element={<Signup />} />
     </Routes>
     <Footer />
   </div>
