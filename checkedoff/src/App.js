@@ -9,6 +9,7 @@ import Recipes from './components/Recipes';
 import Shopping from './components/Shopping';
 import Documents from './components/Documents';
 import Signup from './components/Signup';
+import Login from './components/Login';
 import './App.css';
 
 // Main App component containing routes for different pages
@@ -28,6 +29,7 @@ const App = () => (
       <Route path="/shopping" element={<Shopping />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
     <Footer />
   </div>
