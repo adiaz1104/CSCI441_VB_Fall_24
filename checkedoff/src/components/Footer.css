@@ -7,7 +7,6 @@
   padding: 0.25rem;
   text-align: center;
   z-index: 10; /* Higher z-index than content */
-  /* Optional: add a subtle shadow to separate it from content */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
   

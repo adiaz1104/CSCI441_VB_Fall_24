@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTasks } from './TaskContext';
 import './Tasks.css';
 
-/**
+/*
  * Tasks Component
  * Displays and manages tasks with filtering, adding, and removing functionality
  * Uses shared task context for state management across the application

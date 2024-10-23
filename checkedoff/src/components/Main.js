@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTasks } from './TaskContext'; // Update import path based on your file structure
+import { useTasks } from './TaskContext';
 import './Main.css';
 
 const Main = () => {
@@ -52,7 +52,6 @@ const Main = () => {
           </div>
         </div>
 
-        {/* Keep your Events Today section as is */}
         <div className="section-card">
           <div className="section-header">
             <h3 className="section-title">Events Today</h3>
