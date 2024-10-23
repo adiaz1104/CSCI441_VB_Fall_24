@@ -42,10 +42,11 @@
 /* Added variables for style colors to more easily adjust colors on the fly */
 :root {
   --blueprimary: #007bff;
+  --bluesecondary: #043e7b;
   --lightbackground: #f0f8ff;
-  --white: #FFF;
+  --white: #fff;
   --darkfont: #333;
-  --hovercolor: #ccc;
+  --hovercolor: #cfcfcf;
 }
 
 body {

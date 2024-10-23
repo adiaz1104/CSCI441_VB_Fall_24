@@ -1,51 +1,154 @@
-.header-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center align items */
-  width: 100%;
+header {
+  background-color: var(--blueprimary);
+  padding: 0.8rem;
+  color: var(--white);
+  box-shadow: black 0.15rem 0.15rem;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* Logo and Hamburger Container */
+.logo-menu-container {
+  display: flex;
+  align-items: center;
+  gap: rem;
+}
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: inherit;
+  z-index: 100;
+}
+
+.hamburger-line {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px 0;
+  background-color: var(--white);
+  transition: all 0.3s ease;
+}
+
+/* Navigation Styles */
 nav {
-  width: 100%; /* Ensure nav takes full width */
+  display: flex;
+  align-items: center;
 }
 
 nav ul {
   display: flex;
-  flex-direction: column; /* Ensure column direction */
   list-style: none;
-  padding: 0;
   margin: 0;
-  text-align: center; /* Center align text */
-}
-
-nav ul li {
-  margin: 0.5rem 0; /* Add margin for spacing */
+  padding: 0;
+  gap: 2rem;
 }
 
 nav ul li a {
   color: var(--white);
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
-  text-decoration: underline;
+  color: var(--hovercolor);
 }
 
-/* Larger screens adjustments */
-@media (min-width: 768px) {
-  .header-content {
-    flex-direction: row; /* Row direction for larger screens */
-    justify-content: space-between;
-    align-items: center;
+.settings-icon {
+  color: var(--white);
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+    margin-left: 1rem; /* Add space between logo and hamburger */
+  }
+
+  /* Hamburger Animation */
+  .hamburger-line.open:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger-line.open:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-line.open:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--blueprimary);
+    padding: 1rem;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  nav.open {
+    display: block;
+    box-shadow: black 0.05rem 0.05rem;
   }
 
   nav ul {
-    flex-direction: row; /* Row direction for larger screens */
-    text-align: left; /* Left align for larger screens */
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   nav ul li {
-    margin: 0 1rem; /* Horizontal margin for spacing */
+    width: 100%;
+    text-align: center;
   }
+
+  nav ul li:hover {
+    background-color: var(--bluesecondary);
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 0.5rem 0;
+  }
+
+  .settings-icon {
+    display: none;
+  }
+}
+
+/* Animation for menu opening */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+nav.open {
+  animation: slideDown 0.3s ease forwards;
 }
