@@ -25,3 +25,7 @@
   .footer-link:hover {
     text-decoration: underline;
   }
+
+  .footer-separator {
+    color: black;
+  }
