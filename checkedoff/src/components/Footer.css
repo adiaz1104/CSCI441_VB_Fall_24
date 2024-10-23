@@ -1,13 +1,15 @@
 .footer {
-    color: var(--blueprimary);
-    padding: 0.5rem;
-    position: fixed;
-    text-align: center;
-    z-index: -1;   /* Sets the footer to the background so that content can be scrolled above it */
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white; /* Or any background color you prefer */
+  padding: 0.25rem;
+  text-align: center;
+  z-index: 10; /* Higher z-index than content */
+  /* Optional: add a subtle shadow to separate it from content */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
   
   .footer-content {
     display: flex;
