@@ -37,7 +37,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autocomplete="on"
+            autoComplete="true"
           />
         </div>
         <button type="submit" className="login-button">Login</button>
