@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white; /* Or any background color you prefer */
+  background-color: white;
   padding: 0.25rem;
   text-align: center;
   z-index: 10; /* Higher z-index than content */
