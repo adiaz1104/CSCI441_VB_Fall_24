@@ -10,6 +10,7 @@
   margin: 0 auto;
   z-index: 10; /* Higher z-index than content */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem 0.25rem 0 0;
 }
   
   .footer-content {
