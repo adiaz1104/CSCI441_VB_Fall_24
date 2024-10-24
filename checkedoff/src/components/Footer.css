@@ -3,9 +3,11 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
-  padding: 0.25rem;
+  background-color: var(--white);
+  padding: 0.2rem;
   text-align: center;
+  width: 60%;
+  margin: 0 auto;
   z-index: 10; /* Higher z-index than content */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
