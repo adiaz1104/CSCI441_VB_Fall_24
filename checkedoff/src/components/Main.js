@@ -3,8 +3,8 @@ import { useTasks } from './TaskContext';
 import './Main.css';
 
 const Main = () => {
-  // Replace the local tasks state with the shared context
-  const { tasks } = useTasks();
+  // Get tasks and toggleTaskStatus from context
+  const { tasks, toggleTaskStatus } = useTasks();
   const [selectedUser, setSelectedUser] = useState('');
 
   // Get unique users for filter
@@ -40,14 +40,28 @@ const Main = () => {
           <div className="section-content">
             <div className="items-grid">
               {filteredTasks.map(task => (
-                <div key={task.id} className="item-card">
+                <div key={task.id} className={`item-card ${task.status === 'completed' ? 'completed' : ''}`}>
                   <div className="item-header">
-                    <p className="item-user">{task.user}</p>
+                    <div className="item-user-status">
+                      <input
+                        type="checkbox"
+                        className="item-checkbox"
+                        checked={task.status === 'completed'}
+                        onChange={() => toggleTaskStatus(task.id)}
+                        aria-label={`Mark "${task.task}" as ${task.status === 'completed' ? 'incomplete' : 'complete'}`}
+                      />
+                      <p className="item-user">{task.user}</p>
+                    </div>
                     <p className="item-time">{task.dueDate}</p>
                   </div>
                   <p className="item-description">{task.task}</p>
                 </div>
               ))}
+              {filteredTasks.length === 0 && (
+                <div className="no-items-message">
+                  No tasks found{selectedUser ? ` for ${selectedUser}` : ''}
+                </div>
+              )}
             </div>
           </div>
         </div>

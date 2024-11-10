@@ -2,18 +2,9 @@ import React, { useState } from 'react';
 import { useTasks } from './TaskContext';
 import './Tasks.css';
 
-/*
- * Tasks Component
- * Displays and manages tasks with filtering, adding, and removing functionality
- * Uses shared task context for state management across the application
- */
 const Tasks = () => {
-  // =========================================
-  // Context and State Management
-  // =========================================
-  
-  // Get tasks and task management functions from context
-  const { tasks, addTask, removeTask } = useTasks();
+  // Get task-related functions and state from context
+  const { tasks, addTask, removeTask, toggleTaskStatus } = useTasks();
 
   // Local state for new task form
   const [newTask, setNewTask] = useState({
@@ -26,10 +17,6 @@ const Tasks = () => {
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
 
-  // =========================================
-  // Derived Values and Calculations
-  // =========================================
-  
   // Get unique users for filter dropdown
   const users = [...new Set(tasks.map(task => task.user))];
 
@@ -38,15 +25,7 @@ const Tasks = () => {
     ? tasks.filter(task => task.user === selectedUser)
     : tasks;
 
-  // =========================================
-  // Event Handlers
-  // =========================================
-  
-  /**
-   * Handles changes to new task form inputs
-   * @param {Object} e - Event object
-   * @param {string} field - Field to update (user, task, or dueDate)
-   */
+  // Handle input changes in the new task form
   const handleInputChange = (e, field) => {
     setNewTask(prev => ({
       ...prev,
@@ -54,42 +33,27 @@ const Tasks = () => {
     }));
   };
 
-  /**
-   * Handles form submission for new task
-   * Validates inputs and adds task to global state
-   * @param {Object} e - Form submission event
-   */
+  // Handle form submission for new task
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Validate all required fields are filled
     if (newTask.user && newTask.task && newTask.dueDate) {
-      // Add task using context function
       addTask(newTask);
-      
-      // Reset form and hide it
-      setNewTask({ user: '', task: '', dueDate: '' });
+      setNewTask({ user: '', task: '', dueDate: '' }); // Reset form
       setShowNewTaskForm(false);
     }
   };
 
-  /**
-   * Toggles visibility of new task form
-   * Resets form data when hiding
-   */
+  // Toggle visibility of new task form
   const toggleTaskForm = () => {
     setShowNewTaskForm(!showNewTaskForm);
     if (showNewTaskForm) {
-      setNewTask({ user: '', task: '', dueDate: '' });
+      setNewTask({ user: '', task: '', dueDate: '' }); // Reset form when closing
     }
   };
 
-  // =========================================
-  // Render Component
-  // =========================================
   return (
     <div className="tasks-container">
-      {/* Header Section with Filter and Add Button */}
+      {/* Filter and Add Task Section */}
       <div className="tasks-header">
         <div className="filter-section">
           <div className="filter-group">
@@ -174,12 +138,23 @@ const Tasks = () => {
         </div>
       )}
 
-      {/* Tasks Grid */}
+      {/* Tasks Grid - Displays all tasks with completion checkboxes */}
       <div className="tasks-grid">
         {filteredTasks.map(task => (
-          <div key={task.id} className="task-card">
+          <div key={task.id} className={`task-card ${task.status === 'completed' ? 'completed' : ''}`}>
             <div className="task-header">
-              <h3 className="task-user">{task.user}</h3>
+              <div className="task-header-left">
+                {/* Completion checkbox */}
+                <input
+                  type="checkbox"
+                  checked={task.status === 'completed'}
+                  onChange={() => toggleTaskStatus(task.id)}
+                  className="task-checkbox"
+                  aria-label={`Mark task "${task.task}" as ${task.status === 'completed' ? 'incomplete' : 'complete'}`}
+                />
+                <h3 className="task-user">{task.user}</h3>
+              </div>
+              {/* Remove task button */}
               <button
                 onClick={() => removeTask(task.id)}
                 className="remove-btn"
@@ -194,6 +169,7 @@ const Tasks = () => {
             </div>
           </div>
         ))}
+        {/* Show message when no tasks are found */}
         {filteredTasks.length === 0 && (
           <div className="no-tasks-message">
             No tasks found{selectedUser ? ` for ${selectedUser}` : ''}
