@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import './DocumentUpload.css';
 
-const Documents = () => {
-  // Sample initial documents
+const DocumentUpload = () => {
+  // Sample initial documents with additional file data
   const initialDocuments = [
     {
       id: 1,
       name: "Family Vacation Plans",
       fileName: "vacation_2024.pdf",
+      fileType: "application/pdf",
+      fileContent: "base64_content_here", // In a real app, this would be actual file data
       user: "Tara",
       uploadDate: "2024-10-15",
       category: "Travel",
@@ -17,87 +18,42 @@ const Documents = () => {
       id: 2,
       name: "School Permission Slip",
       fileName: "field_trip_permission.pdf",
+      fileType: "application/pdf",
+      fileContent: "base64_content_here",
       user: "Adam",
       uploadDate: "2024-10-14",
       category: "School",
       size: "156 KB"
-    },
-    {
-      id: 3,
-      name: "Medical Records - Jake",
-      fileName: "medical_records_2024.pdf",
-      user: "Jake",
-      uploadDate: "2024-10-13",
-      category: "Medical",
-      size: "3.1 MB"
-    },
-    {
-      id: 4,
-      name: "Monthly Budget Sheet",
-      fileName: "budget_october.xlsx",
-      user: "Tara",
-      uploadDate: "2024-10-12",
-      category: "Financial",
-      size: "892 KB"
-    },
-    {
-      id: 5,
-      name: "Home Insurance Policy",
-      fileName: "home_insurance_2024.pdf",
-      user: "Adam",
-      uploadDate: "2024-10-11",
-      category: "Insurance",
-      size: "1.8 MB"
-    },
-    {
-      id: 6,
-      name: "Soccer Team Schedule",
-      fileName: "soccer_schedule.pdf",
-      user: "Dylan",
-      uploadDate: "2024-10-10",
-      category: "Sports",
-      size: "445 KB"
-    },
-    {
-      id: 7,
-      name: "Recipe Collection",
-      fileName: "family_recipes.docx",
-      user: "Tara",
-      uploadDate: "2024-10-09",
-      category: "Recipes",
-      size: "1.2 MB"
-    },
-    {
-      id: 8,
-      name: "Car Maintenance Records",
-      fileName: "car_maintenance.pdf",
-      user: "Adam",
-      uploadDate: "2024-10-08",
-      category: "Vehicle",
-      size: "756 KB"
     }
   ];
 
+  // State management
   const [documents, setDocuments] = useState(initialDocuments);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [error, setError] = useState('');
   const [uploadForm, setUploadForm] = useState({
     name: '',
     file: null,
     user: '',
     category: ''
   });
-  const [error, setError] = useState('');
-  const [showUploadForm, setShowUploadForm] = useState(false);
 
-  // Get unique values for filters
+  // Filter documents
   const users = [...new Set(documents.map(doc => doc.user))];
   const categories = [...new Set(documents.map(doc => doc.category))];
+  const filteredDocuments = documents.filter(doc => {
+    const userMatch = !selectedUser || doc.user === selectedUser;
+    const categoryMatch = !selectedCategory || doc.category === selectedCategory;
+    return userMatch && categoryMatch;
+  });
 
+  // Handle file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
         setError('File size must be less than 10MB');
         return;
       }
@@ -109,6 +65,7 @@ const Documents = () => {
     }
   };
 
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUploadForm(prev => ({
@@ -117,40 +74,67 @@ const Documents = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!uploadForm.name || !uploadForm.file || !uploadForm.user || !uploadForm.category) {
       setError('Please fill in all fields');
       return;
     }
 
-    const newDocument = {
-      id: documents.length + 1,
-      name: uploadForm.name,
-      fileName: uploadForm.file.name,
-      user: uploadForm.user,
-      category: uploadForm.category,
-      uploadDate: new Date().toISOString().split('T')[0],
-      size: `${(uploadForm.file.size / (1024 * 1024)).toFixed(2)} MB`
-    };
+    try {
+      // Read file as base64
+      const reader = new FileReader();
+      reader.onload = () => {
+        const newDocument = {
+          id: documents.length + 1,
+          name: uploadForm.name,
+          fileName: uploadForm.file.name,
+          fileType: uploadForm.file.type,
+          fileContent: reader.result,
+          user: uploadForm.user,
+          category: uploadForm.category,
+          uploadDate: new Date().toISOString().split('T')[0],
+          size: `${(uploadForm.file.size / (1024 * 1024)).toFixed(2)} MB`
+        };
 
-    setDocuments(prev => [...prev, newDocument]);
-    setUploadForm({
-      name: '',
-      file: null,
-      user: '',
-      category: ''
-    });
-    setShowUploadForm(false);
-    setError('');
+        setDocuments(prev => [...prev, newDocument]);
+        setUploadForm({
+          name: '',
+          file: null,
+          user: '',
+          category: ''
+        });
+        setShowUploadForm(false);
+        setError('');
+      };
+      reader.readAsDataURL(uploadForm.file);
+    } catch (error) {
+      setError('Error uploading file');
+    }
   };
 
-  // Filter documents based on selected criteria
-  const filteredDocuments = documents.filter(doc => {
-    const userMatch = !selectedUser || doc.user === selectedUser;
-    const categoryMatch = !selectedCategory || doc.category === selectedCategory;
-    return userMatch && categoryMatch;
-  });
+  // Handle document download
+  const handleDownload = (document) => {
+    try {
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = document.fileContent; // Use the base64 content
+      link.download = document.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      setError('Error downloading file');
+    }
+  };
+
+  // Handle document deletion
+  const handleDelete = (documentId) => {
+    if (window.confirm('Are you sure you want to delete this document?')) {
+      setDocuments(prev => prev.filter(doc => doc.id !== documentId));
+    }
+  };
 
   return (
     <div className="document-upload-container">
@@ -193,6 +177,8 @@ const Documents = () => {
           {showUploadForm ? 'Cancel' : 'Upload Document'}
         </button>
       </div>
+
+      {error && <div className="error-message">{error}</div>}
 
       {showUploadForm && (
         <div className="upload-form-container">
@@ -252,8 +238,6 @@ const Documents = () => {
               />
             </div>
 
-            {error && <p className="error-message">{error}</p>}
-            
             <button type="submit" className="submit-button">Upload</button>
           </form>
         </div>
@@ -275,8 +259,18 @@ const Documents = () => {
               <p className="document-date">Uploaded: {doc.uploadDate}</p>
             </div>
             <div className="document-actions">
-              <button className="action-button download-btn">Download</button>
-              <button className="action-button delete-btn">Delete</button>
+              <button 
+                className="action-button download-btn"
+                onClick={() => handleDownload(doc)}
+              >
+                Download
+              </button>
+              <button 
+                className="action-button delete-btn"
+                onClick={() => handleDelete(doc.id)}
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
@@ -290,4 +284,4 @@ const Documents = () => {
   );
 };
 
-export default Documents;
+export default DocumentUpload;
