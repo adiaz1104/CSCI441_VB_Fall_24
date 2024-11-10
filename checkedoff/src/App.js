@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { TaskProvider } from './components/TaskContext';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import Main from './components/Main';
 import Tasks from './components/Tasks';
 import Calendar from './components/Calendar';
@@ -33,7 +32,6 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
           </Routes>
-        <Footer />
       </div>
     </TaskProvider>
   );

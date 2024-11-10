@@ -1,0 +1,47 @@
+.account-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+  
+  .auth-links {
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--blueprimary);
+  }
+  
+  .auth-links:hover {
+    background-color: var(--bluesecondary);
+  }
+  
+  .auth-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .account-nav {
+      padding: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .auth-links {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }

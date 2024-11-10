@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../App.css';
+import AccountNav from './AccountNav';
 import './Header.css';
 
 const Header = () => {
@@ -15,7 +15,6 @@ const Header = () => {
       <div className="header-content">
         <div className="logo-menu-container">
           <h1>CheckedOff</h1>
-          {/* Hamburger menu button */}
           <button className="hamburger-menu" onClick={toggleMenu} aria-label="Toggle menu">
             <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
             <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
@@ -34,9 +33,7 @@ const Header = () => {
           </ul>
         </nav>
 
-        <Link to="/settings" className="settings-icon">
-          <i className="fas fa-cog"></i>
-        </Link>
+        <AccountNav />
       </div>
     </header>
   );
