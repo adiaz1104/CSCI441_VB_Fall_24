@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import './Recipes.css';
 
+/**
+ * Recipes Component
+ * Displays and manages recipes with filtering, adding, and removing functionality
+ */
 const Recipes = () => {
+  // Initial sample recipe data
   const initialRecipes = [
     {
       id: 1,
@@ -61,7 +66,9 @@ const Recipes = () => {
     }
   ];
 
-  // State management
+  // =========================================
+  // State Management
+  // =========================================
   const [recipes, setRecipes] = useState(initialRecipes);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -82,12 +89,15 @@ const Recipes = () => {
     servings: ''
   });
 
+  // =========================================
+  // Derived Values
+  // =========================================
   // Get unique values for filters
   const users = [...new Set(recipes.map(recipe => recipe.user))];
   const categories = [...new Set(recipes.map(recipe => recipe.category))];
   const difficulties = [...new Set(recipes.map(recipe => recipe.difficulty))];
 
-  // Filter recipes
+  // Filter recipes based on selected criteria
   const filteredRecipes = recipes.filter(recipe => {
     const userMatch = !selectedUser || recipe.user === selectedUser;
     const categoryMatch = !selectedCategory || recipe.category === selectedCategory;
@@ -95,7 +105,13 @@ const Recipes = () => {
     return userMatch && categoryMatch && difficultyMatch;
   });
 
-  // Handle form input changes
+  // =========================================
+  // Event Handlers
+  // =========================================
+  /**
+   * Handles changes to form inputs
+   * @param {Object} e - Event object from input change
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewRecipe(prev => ({
@@ -104,7 +120,9 @@ const Recipes = () => {
     }));
   };
 
-  // Handle adding ingredients
+  /**
+   * Handles adding a new ingredient to the recipe
+   */
   const handleAddIngredient = () => {
     if (newIngredient.trim()) {
       setNewRecipe(prev => ({
@@ -115,7 +133,10 @@ const Recipes = () => {
     }
   };
 
-  // Handle removing ingredients
+  /**
+   * Handles removing an ingredient from the recipe
+   * @param {number} index - Index of ingredient to remove
+   */
   const handleRemoveIngredient = (index) => {
     setNewRecipe(prev => ({
       ...prev,
@@ -123,13 +144,16 @@ const Recipes = () => {
     }));
   };
 
-  // Handle form submission
+  /**
+   * Handles form submission for new recipe
+   * @param {Object} e - Form submission event
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
       const newRecipeWithId = {
         ...newRecipe,
-        id: recipes.length + 1 // Simple ID generation
+        id: recipes.length + 1
       };
       setRecipes(prev => [...prev, newRecipeWithId]);
       setShowAddModal(false);
@@ -148,12 +172,26 @@ const Recipes = () => {
     }
   };
 
-  // Form validation
+  /**
+   * Validates the recipe form
+   * @returns {boolean} Whether the form is valid
+   */
   const validateForm = () => {
     const required = ['title', 'user', 'prepTime', 'cookTime', 'difficulty', 'category', 'instructions', 'servings'];
     return required.every(field => newRecipe[field]) && newRecipe.ingredients.length > 0;
   };
 
+  /**
+   * Handles deleting a recipe
+   * @param {number} id - ID of recipe to delete
+   */
+  const handleDeleteRecipe = (id) => {
+    setRecipes(prev => prev.filter(recipe => recipe.id !== id));
+  };
+
+  // =========================================
+  // Render Component
+  // =========================================
   return (
     <div className="recipes-container">
       {/* Filters Section */}
@@ -366,7 +404,16 @@ const Recipes = () => {
           <div key={recipe.id} className="recipe-card">
             <div className="recipe-header">
               <h3 className="recipe-title">{recipe.title}</h3>
-              <span className="recipe-user">by {recipe.user}</span>
+              <div className="recipe-header-actions">
+                <span className="recipe-user">by {recipe.user}</span>
+                <button 
+                  className="delete-recipe-btn"
+                  onClick={() => handleDeleteRecipe(recipe.id)}
+                  aria-label={`Delete ${recipe.title}`}
+                >
+                  ×
+                </button>
+              </div>
             </div>
             
             <div className="recipe-meta">
@@ -401,6 +448,11 @@ const Recipes = () => {
             </div>
           </div>
         ))}
+        {filteredRecipes.length === 0 && (
+          <p className="no-recipes">
+            No recipes found{selectedUser ? ` for ${selectedUser}` : ''}
+          </p>
+        )}
       </div>
     </div>
   );
