@@ -1,49 +1,17 @@
 import React, { useState } from 'react';
+import { useShoppingList } from './ShoppingContext';
 import './Shopping.css';
 
 const Shopping = () => {
-  // Initial sample shopping list data
-  const initialItems = [
-    {
-      id: 1,
-      user: "Tara",
-      item: "Milk",
-      quantity: 2,
-      category: "Dairy",
-      store: "Walmart",
-      status: "pending"
-    },
-    {
-      id: 2,
-      user: "Adam",
-      item: "Bread",
-      quantity: 1,
-      category: "Bakery",
-      store: "Costco",
-      status: "pending"
-    },
-    {
-      id: 3,
-      user: "Jake",
-      item: "Chicken Breast",
-      quantity: 3,
-      category: "Meat",
-      store: "Walmart",
-      status: "completed"
-    },
-    {
-      id: 4,
-      user: "Dylan",
-      item: "Apples",
-      quantity: 6,
-      category: "Produce",
-      store: "Trader Joe's",
-      status: "pending"
-    }
-  ];
+  // Get shopping list state and functions from context
+  const { 
+    shoppingItems: items, 
+    removeFromShoppingList: removeItem,
+    toggleItemStatus,
+    addToShoppingList
+  } = useShoppingList();
 
-  // State management
-  const [items, setItems] = useState(initialItems);
+  // Local state
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedStore, setSelectedStore] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -64,7 +32,7 @@ const Shopping = () => {
   const stores = [...new Set(items.map(item => item.store))];
   const categories = [...new Set(items.map(item => item.category))];
 
-  // Filter items based on selected criteria
+  // Filter items
   const filteredItems = items.filter(item => {
     const userMatch = !selectedUser || item.user === selectedUser;
     const storeMatch = !selectedStore || item.store === selectedStore;
@@ -87,9 +55,9 @@ const Shopping = () => {
     if (validateForm()) {
       const newItemWithId = {
         ...newItem,
-        id: items.length + 1
+        id: Date.now() + Math.random()
       };
-      setItems(prev => [...prev, newItemWithId]);
+      addToShoppingList([newItemWithId]); // Add as array since addToShoppingList expects array
       setShowAddModal(false);
       // Reset form
       setNewItem({
@@ -107,24 +75,6 @@ const Shopping = () => {
   const validateForm = () => {
     const required = ['user', 'item', 'quantity', 'category', 'store'];
     return required.every(field => newItem[field]);
-  };
-
-  // Toggle item status
-  const toggleItemStatus = (id) => {
-    setItems(prev => prev.map(item => {
-      if (item.id === id) {
-        return {
-          ...item,
-          status: item.status === 'pending' ? 'completed' : 'pending'
-        };
-      }
-      return item;
-    }));
-  };
-
-  // Remove item
-  const removeItem = (id) => {
-    setItems(prev => prev.filter(item => item.id !== id));
   };
 
   return (

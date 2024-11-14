@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
+import { useShoppingList } from './ShoppingContext';
 import './Recipes.css';
 
-/**
- * Recipes Component
- * Displays and manages recipes with filtering, adding, and removing functionality
- */
 const Recipes = () => {
-  // Initial sample recipe data
+  // Initial recipes data
   const initialRecipes = [
     {
       id: 1,
@@ -66,15 +63,14 @@ const Recipes = () => {
     }
   ];
 
-  // =========================================
-  // State Management
-  // =========================================
+  // State management
   const [recipes, setRecipes] = useState(initialRecipes);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   
   // New recipe form state
   const [newRecipe, setNewRecipe] = useState({
@@ -89,15 +85,15 @@ const Recipes = () => {
     servings: ''
   });
 
-  // =========================================
-  // Derived Values
-  // =========================================
+  // Get shopping list context
+  const { addToShoppingList } = useShoppingList();
+
   // Get unique values for filters
   const users = [...new Set(recipes.map(recipe => recipe.user))];
   const categories = [...new Set(recipes.map(recipe => recipe.category))];
   const difficulties = [...new Set(recipes.map(recipe => recipe.difficulty))];
 
-  // Filter recipes based on selected criteria
+  // Filter recipes
   const filteredRecipes = recipes.filter(recipe => {
     const userMatch = !selectedUser || recipe.user === selectedUser;
     const categoryMatch = !selectedCategory || recipe.category === selectedCategory;
@@ -105,13 +101,24 @@ const Recipes = () => {
     return userMatch && categoryMatch && difficultyMatch;
   });
 
-  // =========================================
-  // Event Handlers
-  // =========================================
-  /**
-   * Handles changes to form inputs
-   * @param {Object} e - Event object from input change
-   */
+  // Handle adding ingredients to shopping list
+  const handleAddToShoppingList = (ingredients, recipeName) => {
+    const shoppingItems = ingredients.map(ingredient => ({
+      id: Date.now() + Math.random(),
+      user: "From Recipe: " + recipeName,
+      item: ingredient,
+      quantity: 1,
+      category: "Recipe Ingredients",
+      store: "Any",
+      status: "pending"
+    }));
+    
+    addToShoppingList(shoppingItems);
+    setSuccessMessage(`Added ingredients from ${recipeName} to shopping list`);
+    setTimeout(() => setSuccessMessage(''), 3000);
+  };
+
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewRecipe(prev => ({
@@ -120,9 +127,7 @@ const Recipes = () => {
     }));
   };
 
-  /**
-   * Handles adding a new ingredient to the recipe
-   */
+  // Handle adding ingredients to recipe
   const handleAddIngredient = () => {
     if (newIngredient.trim()) {
       setNewRecipe(prev => ({
@@ -133,10 +138,7 @@ const Recipes = () => {
     }
   };
 
-  /**
-   * Handles removing an ingredient from the recipe
-   * @param {number} index - Index of ingredient to remove
-   */
+  // Handle removing ingredients from recipe
   const handleRemoveIngredient = (index) => {
     setNewRecipe(prev => ({
       ...prev,
@@ -144,10 +146,7 @@ const Recipes = () => {
     }));
   };
 
-  /**
-   * Handles form submission for new recipe
-   * @param {Object} e - Form submission event
-   */
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -172,26 +171,12 @@ const Recipes = () => {
     }
   };
 
-  /**
-   * Validates the recipe form
-   * @returns {boolean} Whether the form is valid
-   */
+  // Form validation
   const validateForm = () => {
     const required = ['title', 'user', 'prepTime', 'cookTime', 'difficulty', 'category', 'instructions', 'servings'];
     return required.every(field => newRecipe[field]) && newRecipe.ingredients.length > 0;
   };
 
-  /**
-   * Handles deleting a recipe
-   * @param {number} id - ID of recipe to delete
-   */
-  const handleDeleteRecipe = (id) => {
-    setRecipes(prev => prev.filter(recipe => recipe.id !== id));
-  };
-
-  // =========================================
-  // Render Component
-  // =========================================
   return (
     <div className="recipes-container">
       {/* Filters Section */}
@@ -241,6 +226,65 @@ const Recipes = () => {
         <button className="add-recipe-btn" onClick={() => setShowAddModal(true)}>
           Add New Recipe
         </button>
+      </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="success-message">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Recipes Grid */}
+      <div className="recipes-grid">
+        {filteredRecipes.map(recipe => (
+          <div key={recipe.id} className="recipe-card">
+            <div className="recipe-header">
+              <h3 className="recipe-title">{recipe.title}</h3>
+              <span className="recipe-user">by {recipe.user}</span>
+            </div>
+            
+            <div className="recipe-meta">
+              <span className="meta-item">
+                <i className="fas fa-clock"></i> Prep: {recipe.prepTime}
+              </span>
+              <span className="meta-item">
+                <i className="fas fa-fire"></i> Cook: {recipe.cookTime}
+              </span>
+              <span className="meta-item">
+                <i className="fas fa-signal"></i> {recipe.difficulty}
+              </span>
+              <span className="meta-item">
+                <i className="fas fa-utensils"></i> Serves {recipe.servings}
+              </span>
+            </div>
+
+            <div className="recipe-details">
+              <div className="ingredients-section">
+                <div className="ingredients-header">
+                  <h4>Ingredients</h4>
+                  <button
+                    className="add-ingredients-btn"
+                    onClick={() => handleAddToShoppingList(recipe.ingredients, recipe.title)}
+                    aria-label="Add to list"
+                  >
+                    +
+                  </button>
+                </div>
+                <ul>
+                  {recipe.ingredients.map((ingredient, index) => (
+                    <li key={index}>{ingredient}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="instructions">
+                <h4>Instructions</h4>
+                <p>{recipe.instructions}</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Add Recipe Modal */}
@@ -397,63 +441,6 @@ const Recipes = () => {
           </div>
         </div>
       )}
-
-      {/* Recipes Grid */}
-      <div className="recipes-grid">
-        {filteredRecipes.map(recipe => (
-          <div key={recipe.id} className="recipe-card">
-            <div className="recipe-header">
-              <h3 className="recipe-title">{recipe.title}</h3>
-              <div className="recipe-header-actions">
-                <span className="recipe-user">by {recipe.user}</span>
-                <button 
-                  className="delete-recipe-btn"
-                  onClick={() => handleDeleteRecipe(recipe.id)}
-                  aria-label={`Delete ${recipe.title}`}
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-            
-            <div className="recipe-meta">
-              <span className="meta-item">
-                <i className="fas fa-clock"></i> Prep: {recipe.prepTime}
-              </span>
-              <span className="meta-item">
-                <i className="fas fa-fire"></i> Cook: {recipe.cookTime}
-              </span>
-              <span className="meta-item">
-                <i className="fas fa-signal"></i> {recipe.difficulty}
-              </span>
-              <span className="meta-item">
-                <i className="fas fa-utensils"></i> Serves {recipe.servings}
-              </span>
-            </div>
-
-            <div className="recipe-details">
-              <div className="ingredients">
-                <h4>Ingredients</h4>
-                <ul>
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="instructions">
-                <h4>Instructions</h4>
-                <p>{recipe.instructions}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-        {filteredRecipes.length === 0 && (
-          <p className="no-recipes">
-            No recipes found{selectedUser ? ` for ${selectedUser}` : ''}
-          </p>
-        )}
-      </div>
     </div>
   );
 };

@@ -149,6 +149,100 @@
 .recipe-details h4 {
   margin: 0 0 0.5rem 0;
   color: #333;
+  font-size: 1.1rem;
+}
+
+/* Ingredients Section Styles */
+.ingredients-section {
+  position: relative;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ingredients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 3;
+}
+
+.add-ingredients-btn {
+  background-color: #0066ff;
+  position: relative;
+  z-index: 2; 
+  color: white;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+}
+
+.add-ingredients-btn:hover {
+  background-color: #0052cc;
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px rgba(0, 102, 255, 0.3);
+}
+
+.add-ingredients-btn:active {
+  transform: scale(1);
+}
+
+/* Tooltip */
+.add-ingredients-btn::before {
+  content: "Add to list";
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  /* Adjust positioning */
+  bottom: 40px; /* Position above the button instead of using top */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 9999; /* Very high z-index */
+  pointer-events: none;
+}
+
+.add-ingredients-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 30px; /* Position arrow above button */
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.add-ingredients-btn:hover::before,
+.add-ingredients-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1100;
 }
 
 /* Modal Styles */
@@ -238,79 +332,43 @@
   resize: vertical;
 }
 
-.ingredient-input {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.ingredient-input input {
-  flex: 1;
-}
-
-.ingredient-input button {
-  padding: 0.5rem 1rem;
-  background-color: var(--blueprimary);
+/* Success Message */
+.success-message {
+  background-color: #4CAF50;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem auto;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideInFadeOut 3s forwards;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  font-weight: 500;
 }
 
-/* Ingredients List Styles */
-.ingredients-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.ingredients-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  background-color: #f8f9fa;
-  margin-bottom: 0.5rem;
-  border-radius: 4px;
-}
-
-.remove-ingredient {
-  background: none;
-  border: none;
-  color: #dc3545;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0.2rem 0.5rem;
-}
-
-/* Form Action Buttons */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.cancel-btn {
-  padding: 0.5rem 1rem;
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submit-btn {
-  padding: 0.5rem 1rem;
-  background-color: var(--blueprimary);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-/* Animation Classes */
-.recipe-card.deleting {
-  animation: fadeOut 0.3s ease-out forwards;
+/* Animations */
+@keyframes slideInFadeOut {
+  0% {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  15% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  85% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
 }
 
 @keyframes fadeOut {
@@ -324,6 +382,48 @@
   }
 }
 
+/* Recipe ingredient list styling */
+.recipe-details .ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.recipe-details .ingredients li {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.recipe-details .ingredients li:last-child {
+  border-bottom: none;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.submit-btn, .cancel-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.submit-btn {
+  background-color: var(--blueprimary);
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+}
+
 /* Empty State */
 .no-recipes {
   text-align: center;
@@ -333,6 +433,42 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .recipe-card,
+  .delete-recipe-btn,
+  .add-ingredients-btn {
+    transition: none;
+    transform: none;
+  }
+
+  .recipe-card.deleting {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .add-ingredients-btn:hover {
+    transform: none;
+  }
+
+  .add-ingredients-btn::before,
+  .add-ingredients-btn::after {
+    transition: none;
+  }
+}
+
+/* Focus States */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.delete-recipe-btn:focus,
+.add-recipe-btn:focus,
+.close-modal:focus,
+.add-ingredients-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.4);
 }
 
 /* Responsive Design */
@@ -380,29 +516,20 @@
     width: 95%;
     padding: 1rem;
   }
-}
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .recipe-card,
-  .delete-recipe-btn {
-    transition: none;
-    transform: none;
+  .ingredients-header {
+    gap: 0.5rem;
   }
 
-  .recipe-card.deleting {
-    animation: none;
-    opacity: 0.5;
+  .add-ingredients-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
   }
-}
 
-/* Focus States */
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus,
-.delete-recipe-btn:focus,
-.add-recipe-btn:focus,
-.close-modal:focus {
-  outline: 2px solid var(--blueprimary);
-  outline-offset: 2px;
+  .add-ingredients-btn::before {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    top: -35px;
+  }
 }
