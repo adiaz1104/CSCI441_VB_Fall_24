@@ -75,12 +75,13 @@
 }
 
 .item-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--blueprimary);
   border-radius: 0.5rem;
   background-color: #f9fafb;
   padding: 1rem;
   transition: transform 0.2s, opacity 0.2s, background-color 0.3s ease;
   animation: fadeIn 0.3s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .item-card:hover {
@@ -111,7 +112,7 @@
   gap: 0.75rem;
 }
 
-.item-checkbox {
+input[type="checkbox"].item-checkbox {
   appearance: none;
   -webkit-appearance: none;
   width: 1.25rem;
@@ -121,29 +122,37 @@
   position: relative;
   cursor: pointer;
   transition: all 0.2s ease;
+  background-color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
-.item-checkbox:hover {
+input[type="checkbox"].item-checkbox:hover {
   background-color: rgba(59, 130, 246, 0.1);
 }
 
-.item-checkbox:checked {
+input[type="checkbox"].item-checkbox:checked {
   background-color: var(--blueprimary);
+  border-color: var(--blueprimary);
 }
 
-.item-checkbox:checked::after {
+input[type="checkbox"].item-checkbox:checked::after {
   content: '✓';
+  color: white;
+  font-size: 0.875rem;
+  line-height: 1;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-  font-size: 0.875rem;
 }
 
-.item-checkbox:focus {
+input[type="checkbox"].item-checkbox:focus {
   outline: 2px solid var(--blueprimary);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
 .item-user {

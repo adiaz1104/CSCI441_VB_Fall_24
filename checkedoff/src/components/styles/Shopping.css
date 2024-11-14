@@ -63,6 +63,7 @@
   background-color: white;
   padding: 1rem;
   border-radius: 8px;
+  border: 2px solid var(--blueprimary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
@@ -74,6 +75,7 @@
 .shopping-item.completed {
   opacity: 0.7;
   background-color: #f8f9fa;
+  border-color: #ccc;
 }
 
 .item-checkbox {
@@ -346,31 +348,4 @@
 .cancel-btn:focus {
   outline: 2px solid var(--blueprimary);
   outline-offset: 2px;
-}
-
-.shopping-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  background-color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  box-shadow: none;
-  transition: transform 0.2s;
-}
-
-.shopping-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.item-checkbox {
-  background: transparent;
-  border: none;
-}
-
-.item-checkbox input[type="checkbox"] {
-  border: 2px solid var(--blueprimary);
-  background: white;
 }
