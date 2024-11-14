@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTasks } from './TaskContext';
-import './Tasks.css';
+import './styles/Tasks.css';
 
 const Tasks = () => {
   // Get task-related functions and state from context

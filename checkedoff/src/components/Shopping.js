@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useShoppingList } from './ShoppingContext';
-import './Shopping.css';
+import './styles/Shopping.css';
 
 const Shopping = () => {
   // Get shopping list state and functions from context

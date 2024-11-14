@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useShoppingList } from './ShoppingContext';
-import './Recipes.css';
+import './styles/Recipes.css';
 
 const Recipes = () => {
   // Initial recipes data

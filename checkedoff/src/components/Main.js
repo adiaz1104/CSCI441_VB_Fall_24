@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTasks } from './TaskContext';
-import './Main.css';
+import './styles/Main.css';
 
 const Main = () => {
   // Get tasks and toggleTaskStatus from context
