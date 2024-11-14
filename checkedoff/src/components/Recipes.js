@@ -146,6 +146,18 @@ const Recipes = () => {
     }));
   };
 
+  // Handle deleting a recipe
+  const handleDeleteRecipe = (recipeId) => {
+    if (window.confirm('Are you sure you want to delete this recipe?')) {
+      setRecipes(prevRecipes => {
+        const newRecipes = prevRecipes.filter(recipe => recipe.id !== recipeId);
+        setSuccessMessage('Recipe deleted successfully');
+        setTimeout(() => setSuccessMessage(''), 3000);
+        return newRecipes;
+      });
+    }
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -156,6 +168,8 @@ const Recipes = () => {
       };
       setRecipes(prev => [...prev, newRecipeWithId]);
       setShowAddModal(false);
+      setSuccessMessage('Recipe added successfully');
+      setTimeout(() => setSuccessMessage(''), 3000);
       // Reset form
       setNewRecipe({
         title: '',
@@ -240,8 +254,17 @@ const Recipes = () => {
         {filteredRecipes.map(recipe => (
           <div key={recipe.id} className="recipe-card">
             <div className="recipe-header">
-              <h3 className="recipe-title">{recipe.title}</h3>
-              <span className="recipe-user">by {recipe.user}</span>
+              <div className="recipe-header-content">
+                <h3 className="recipe-title">{recipe.title}</h3>
+                <span className="recipe-user">by {recipe.user}</span>
+              </div>
+              <button 
+                className="delete-recipe-btn" 
+                onClick={() => handleDeleteRecipe(recipe.id)}
+                aria-label={`Delete ${recipe.title} recipe`}
+              >
+                ×
+              </button>
             </div>
             
             <div className="recipe-meta">
@@ -266,7 +289,7 @@ const Recipes = () => {
                   <button
                     className="add-ingredients-btn"
                     onClick={() => handleAddToShoppingList(recipe.ingredients, recipe.title)}
-                    aria-label="Add to list"
+                    aria-label="Add to shopping list"
                   >
                     +
                   </button>
