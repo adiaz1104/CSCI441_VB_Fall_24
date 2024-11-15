@@ -16,6 +16,8 @@ const Shopping = () => {
   const [selectedStore, setSelectedStore] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   // New item form state
   const [newItem, setNewItem] = useState({
@@ -45,36 +47,44 @@ const Shopping = () => {
     const { name, value } = e.target;
     setNewItem(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'quantity' ? parseInt(value, 10) || 1 : value
     }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const newItemWithId = {
-        ...newItem,
-        id: Date.now() + Math.random()
-      };
-      addToShoppingList([newItemWithId]); // Add as array since addToShoppingList expects array
-      setShowAddModal(false);
-      // Reset form
-      setNewItem({
-        user: '',
-        item: '',
-        quantity: 1,
-        category: '',
-        store: '',
-        status: 'pending'
-      });
+    setError('');
+    
+    // Validate form
+    if (!newItem.user || !newItem.item || !newItem.category || !newItem.store) {
+      setError('Please fill in all required fields');
+      return;
     }
-  };
 
-  // Form validation
-  const validateForm = () => {
-    const required = ['user', 'item', 'quantity', 'category', 'store'];
-    return required.every(field => newItem[field]);
+    // Create new item with unique ID
+    const newShoppingItem = {
+      ...newItem,
+      id: Date.now() + Math.random(),
+    };
+
+    // Add item to shopping list
+    addToShoppingList([newShoppingItem]);
+    
+    // Show success message
+    setSuccess('Item added successfully!');
+    setTimeout(() => setSuccess(''), 3000);
+
+    // Reset form and close modal
+    setNewItem({
+      user: '',
+      item: '',
+      quantity: 1,
+      category: '',
+      store: '',
+      status: 'pending'
+    });
+    setShowAddModal(false);
   };
 
   return (
@@ -128,6 +138,13 @@ const Shopping = () => {
         </button>
       </div>
 
+      {/* Success Message */}
+      {success && (
+        <div className="success-message">
+          {success}
+        </div>
+      )}
+
       {/* Add Item Modal */}
       {showAddModal && (
         <div className="modal-overlay">
@@ -138,6 +155,8 @@ const Shopping = () => {
             </div>
             
             <form onSubmit={handleSubmit} className="shopping-form">
+              {error && <div className="error-message">{error}</div>}
+              
               <div className="form-group">
                 <label htmlFor="user">User:</label>
                 <input
