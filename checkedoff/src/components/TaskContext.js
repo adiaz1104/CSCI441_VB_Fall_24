@@ -6,10 +6,10 @@ const TaskContext = createContext();
 export const TaskProvider = ({ children }) => {
   // Initial task state with mock data
   const [tasks, setTasks] = useState([
-    { id: 1, user: 'Adam', task: 'Mow Lawn', dueDate: '2024-10-05', status: 'pending' },
-    { id: 2, user: 'Tara', task: 'Mail Package', dueDate: '2024-10-05', status: 'pending' },
-    { id: 3, user: 'Jake', task: 'Clean Kitchen', dueDate: '2024-10-06', status: 'completed' },
-    { id: 4, user: 'Dylan', task: 'Submit Scholarship Application', dueDate: '2024-10-12', status: 'pending' }
+    { id: 1, user: 'Adam', task: 'Mow Lawn', dueDate: '2024-11-09', status: 'pending' },
+    { id: 2, user: 'Tara', task: 'Mail Package', dueDate: '2024-11-02', status: 'pending' },
+    { id: 3, user: 'Jake', task: 'Clean Kitchen', dueDate: '2024-11-28', status: 'completed' },
+    { id: 4, user: 'Dylan', task: 'Submit Scholarship Application', dueDate: '2024-11-21', status: 'pending' }
   ]);
 
   // Add a new task with default pending status
