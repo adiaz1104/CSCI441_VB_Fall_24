@@ -7,24 +7,26 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-
+// Middleware to set Content-Type for all responses
+app.use((req, res, next) => { res.setHeader('Content-Type', 'application/json'); next(); });
 console.log('Setting up routes...');
 
 // Simple route to test the server
 app.get('/', (req, res) => {
-  res.send('Welcome to CheckedOff backend!');
+  res.json({ message: 'Welcome to CheckedOff backend!'});
   console.log('Root route accessed');
 });
 
 // Route to get all tasks
 app.get('/tasks', async (req, res) => {
+  console.log('GET /tasks route accessed');
   try {
     const result = await db.query('SELECT * FROM task');
     res.status(200).json(result.rows);
     console.log('Tasks fetched');
   } catch (error) {
     console.error('Error fetching tasks:', error.stack);  // Log the error stack trace
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
 
