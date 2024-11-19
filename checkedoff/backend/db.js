@@ -16,7 +16,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
-  ssl: false  // Completely disable SSL connection
+  ssl: { rejectUnauthorized: false} // Completely disable SSL connection
 });
 
 // Export the query method for executing SQL queries
