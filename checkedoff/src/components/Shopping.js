@@ -1,53 +1,23 @@
 import React, { useState } from 'react';
-import './Shopping.css';
+import { useShoppingList } from './ShoppingContext';
+import './styles/Shopping.css';
 
 const Shopping = () => {
-  // Initial sample shopping list data
-  const initialItems = [
-    {
-      id: 1,
-      user: "Tara",
-      item: "Milk",
-      quantity: 2,
-      category: "Dairy",
-      store: "Walmart",
-      status: "pending"
-    },
-    {
-      id: 2,
-      user: "Adam",
-      item: "Bread",
-      quantity: 1,
-      category: "Bakery",
-      store: "Costco",
-      status: "pending"
-    },
-    {
-      id: 3,
-      user: "Jake",
-      item: "Chicken Breast",
-      quantity: 3,
-      category: "Meat",
-      store: "Walmart",
-      status: "completed"
-    },
-    {
-      id: 4,
-      user: "Dylan",
-      item: "Apples",
-      quantity: 6,
-      category: "Produce",
-      store: "Trader Joe's",
-      status: "pending"
-    }
-  ];
+  // Get shopping list state and functions from context
+  const { 
+    shoppingItems: items, 
+    removeFromShoppingList: removeItem,
+    toggleItemStatus,
+    addToShoppingList
+  } = useShoppingList();
 
-  // State management
-  const [items, setItems] = useState(initialItems);
+  // Local state
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedStore, setSelectedStore] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   // New item form state
   const [newItem, setNewItem] = useState({
@@ -64,7 +34,7 @@ const Shopping = () => {
   const stores = [...new Set(items.map(item => item.store))];
   const categories = [...new Set(items.map(item => item.category))];
 
-  // Filter items based on selected criteria
+  // Filter items
   const filteredItems = items.filter(item => {
     const userMatch = !selectedUser || item.user === selectedUser;
     const storeMatch = !selectedStore || item.store === selectedStore;
@@ -77,54 +47,44 @@ const Shopping = () => {
     const { name, value } = e.target;
     setNewItem(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'quantity' ? parseInt(value, 10) || 1 : value
     }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const newItemWithId = {
-        ...newItem,
-        id: items.length + 1
-      };
-      setItems(prev => [...prev, newItemWithId]);
-      setShowAddModal(false);
-      // Reset form
-      setNewItem({
-        user: '',
-        item: '',
-        quantity: 1,
-        category: '',
-        store: '',
-        status: 'pending'
-      });
+    setError('');
+    
+    // Validate form
+    if (!newItem.user || !newItem.item || !newItem.category || !newItem.store) {
+      setError('Please fill in all required fields');
+      return;
     }
-  };
 
-  // Form validation
-  const validateForm = () => {
-    const required = ['user', 'item', 'quantity', 'category', 'store'];
-    return required.every(field => newItem[field]);
-  };
+    // Create new item with unique ID
+    const newShoppingItem = {
+      ...newItem,
+      id: Date.now() + Math.random(),
+    };
 
-  // Toggle item status
-  const toggleItemStatus = (id) => {
-    setItems(prev => prev.map(item => {
-      if (item.id === id) {
-        return {
-          ...item,
-          status: item.status === 'pending' ? 'completed' : 'pending'
-        };
-      }
-      return item;
-    }));
-  };
+    // Add item to shopping list
+    addToShoppingList([newShoppingItem]);
+    
+    // Show success message
+    setSuccess('Item added successfully!');
+    setTimeout(() => setSuccess(''), 3000);
 
-  // Remove item
-  const removeItem = (id) => {
-    setItems(prev => prev.filter(item => item.id !== id));
+    // Reset form and close modal
+    setNewItem({
+      user: '',
+      item: '',
+      quantity: 1,
+      category: '',
+      store: '',
+      status: 'pending'
+    });
+    setShowAddModal(false);
   };
 
   return (
@@ -178,6 +138,13 @@ const Shopping = () => {
         </button>
       </div>
 
+      {/* Success Message */}
+      {success && (
+        <div className="success-message">
+          {success}
+        </div>
+      )}
+
       {/* Add Item Modal */}
       {showAddModal && (
         <div className="modal-overlay">
@@ -188,6 +155,8 @@ const Shopping = () => {
             </div>
             
             <form onSubmit={handleSubmit} className="shopping-form">
+              {error && <div className="error-message">{error}</div>}
+              
               <div className="form-group">
                 <label htmlFor="user">User:</label>
                 <input

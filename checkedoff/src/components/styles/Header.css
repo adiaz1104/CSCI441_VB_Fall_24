@@ -15,6 +15,18 @@ header {
   position: relative;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--white);
+}
+
 .header-content h1 {
   margin: 0;
   font-size: 1.25rem;
@@ -24,7 +36,7 @@ header {
 .logo-menu-container {
   display: flex;
   align-items: center;
-  gap: rem;
+  gap: 1rem;
 }
 
 /* Hamburger Menu Button */
@@ -80,10 +92,10 @@ nav ul li a:hover {
 }
 
 /* Mobile Styles */
-@media (max-width: 768px) {
+@media (max-width: 1068px) {
   .hamburger-menu {
     display: block;
-    margin-left: 1rem; /* Add space between logo and hamburger */
+    margin-left: 1rem;
   }
 
   /* Hamburger Animation */

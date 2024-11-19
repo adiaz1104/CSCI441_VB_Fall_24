@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './AccountNav.css';
+import './styles/AccountNav.css';
 
 const AccountNav = () => {
   return (
