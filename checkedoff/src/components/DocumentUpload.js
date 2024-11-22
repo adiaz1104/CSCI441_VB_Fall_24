@@ -1,68 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DocumentUpload = () => {
-  // Sample initial documents with additional file data
-  const initialDocuments = [
-    {
-      id: 1,
-      name: "Family Vacation Plans",
-      fileName: "vacation_2024.pdf",
-      fileType: "application/pdf",
-      fileContent: "base64_content_here", // In a real app, this would be actual file data
-      user: "Tara",
-      uploadDate: "2024-10-15",
-      category: "Travel",
-      size: "2.4 MB"
-    },
-    {
-      id: 2,
-      name: "School Permission Slip",
-      fileName: "field_trip_permission.pdf",
-      fileType: "application/pdf",
-      fileContent: "base64_content_here",
-      user: "Adam",
-      uploadDate: "2024-10-14",
-      category: "School",
-      size: "156 KB"
-    }
-  ];
+  // State for documents stored in localStorage
+  const [documents, setDocuments] = useState(() => {
+    const savedDocs = localStorage.getItem('documents');
+    return savedDocs ? JSON.parse(savedDocs) : [];
+  });
 
-  // State management
-  const [documents, setDocuments] = useState(initialDocuments);
+  // UI state
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  
+  // Form state
   const [uploadForm, setUploadForm] = useState({
     name: '',
-    file: null,
     user: '',
     category: ''
   });
 
-  // Filter documents
+  // Get unique users and categories for filters
   const users = [...new Set(documents.map(doc => doc.user))];
   const categories = [...new Set(documents.map(doc => doc.category))];
+
+  // Filter documents
   const filteredDocuments = documents.filter(doc => {
     const userMatch = !selectedUser || doc.user === selectedUser;
     const categoryMatch = !selectedCategory || doc.category === selectedCategory;
     return userMatch && categoryMatch;
   });
 
-  // Handle file change
+  // Save documents to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('documents', JSON.stringify(documents));
+  }, [documents]);
+
+  // Handle file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        setError('File size must be less than 10MB');
-        return;
-      }
-      setUploadForm(prev => ({
-        ...prev,
-        file
-      }));
-      setError('');
+    if (!file) return;
+
+    // Check file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      setError('File size must be less than 10MB');
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        setUploadForm(prev => ({
+          ...prev,
+          file: {
+            name: file.name,
+            type: file.type,
+            size: formatFileSize(file.size),
+            content: reader.result
+          }
+        }));
+        setError('');
+      } catch (error) {
+        setError('Error processing file');
+        console.error('File processing error:', error);
+      }
+    };
+
+    reader.onerror = () => {
+      setError('Error reading file');
+      console.error('FileReader error:', reader.error);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // Format file size
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   // Handle form input changes
@@ -75,56 +94,44 @@ const DocumentUpload = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!uploadForm.name || !uploadForm.file || !uploadForm.user || !uploadForm.category) {
       setError('Please fill in all fields');
       return;
     }
 
-    try {
-      // Read file as base64
-      const reader = new FileReader();
-      reader.onload = () => {
-        const newDocument = {
-          id: documents.length + 1,
-          name: uploadForm.name,
-          fileName: uploadForm.file.name,
-          fileType: uploadForm.file.type,
-          fileContent: reader.result,
-          user: uploadForm.user,
-          category: uploadForm.category,
-          uploadDate: new Date().toISOString().split('T')[0],
-          size: `${(uploadForm.file.size / (1024 * 1024)).toFixed(2)} MB`
-        };
+    const newDocument = {
+      id: Date.now(),
+      name: uploadForm.name,
+      fileName: uploadForm.file.name,
+      fileType: uploadForm.file.type,
+      fileContent: uploadForm.file.content,
+      user: uploadForm.user,
+      category: uploadForm.category,
+      uploadDate: new Date().toISOString().split('T')[0],
+      size: uploadForm.file.size
+    };
 
-        setDocuments(prev => [...prev, newDocument]);
-        setUploadForm({
-          name: '',
-          file: null,
-          user: '',
-          category: ''
-        });
-        setShowUploadForm(false);
-        setError('');
-      };
-      reader.readAsDataURL(uploadForm.file);
-    } catch (error) {
-      setError('Error uploading file');
-    }
+    setDocuments(prev => [...prev, newDocument]);
+    setUploadForm({ name: '', user: '', category: '' });
+    setShowUploadForm(false);
+    setSuccess('Document uploaded successfully!');
+    setTimeout(() => setSuccess(''), 3000);
   };
 
-  // Handle document download
-  const handleDownload = (document) => {
+  // Fixed download function
+  const handleDownload = (doc) => {
     try {
-      // Create a temporary link element
-      const link = document.createElement('a');
-      link.href = document.fileContent; // Use the base64 content
-      link.download = document.fileName;
-      document.body.appendChild(link);
+      const link = window.document.createElement('a');
+      link.href = doc.fileContent;
+      link.download = doc.fileName;
+      link.style.display = 'none';
+      window.document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      window.document.body.removeChild(link);
     } catch (error) {
+      console.error('Download error:', error);
       setError('Error downloading file');
     }
   };
@@ -133,6 +140,8 @@ const DocumentUpload = () => {
   const handleDelete = (documentId) => {
     if (window.confirm('Are you sure you want to delete this document?')) {
       setDocuments(prev => prev.filter(doc => doc.id !== documentId));
+      setSuccess('Document deleted successfully');
+      setTimeout(() => setSuccess(''), 3000);
     }
   };
 
@@ -179,6 +188,7 @@ const DocumentUpload = () => {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
 
       {showUploadForm && (
         <div className="upload-form-container">
@@ -199,19 +209,15 @@ const DocumentUpload = () => {
 
             <div className="form-group">
               <label htmlFor="user" className="form-label">User:</label>
-              <select
+              <input
+                type="text"
                 id="user"
                 name="user"
                 value={uploadForm.user}
                 onChange={handleInputChange}
-                className="form-select"
+                className="form-input"
                 required
-              >
-                <option value="">Select User</option>
-                {users.map(user => (
-                  <option key={user} value={user}>{user}</option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="form-group">
