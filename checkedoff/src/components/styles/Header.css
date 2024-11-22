@@ -91,6 +91,45 @@ nav ul li a:hover {
   font-size: 1.2rem;
 }
 
+.auth-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+}
+
+.user-info {
+  color: var(--white);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bluesecondary);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
 /* Mobile Styles */
 @media (max-width: 1068px) {
   .hamburger-menu {
@@ -149,6 +188,25 @@ nav ul li a:hover {
 
   .settings-icon {
     display: none;
+  }
+
+  .auth-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .user-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .logout-btn {
+    width: 100%;
   }
 }
 

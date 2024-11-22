@@ -1,31 +1,37 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import './styles/Login.css';
 
 const Login = () => {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login, error, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted', { usernameOrEmail, password });
-    // Reset form fields
-    setUsernameOrEmail('');
-    setPassword('');
+    login(email, password);
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
-          <label htmlFor="usernameOrEmail">Username/Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
-            type="text"
-            id="usernameOrEmail"
-            value={usernameOrEmail}
-            onChange={(e) => setUsernameOrEmail(e.target.value)}
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -37,12 +43,10 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autoComplete="true"
           />
         </div>
         <button type="submit" className="login-button">Login</button>
       </form>
-      <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
     </div>
   );
 };
