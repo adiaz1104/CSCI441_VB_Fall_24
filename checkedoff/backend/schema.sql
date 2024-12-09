@@ -1,3 +1,8 @@
+/*written by: Cody Hinz
+tested by: Cody Hinz
+debugged by: Cody Hinz
+*/
+
 /*-- Create User table
 CREATE TABLE IF NOT EXISTS "User" (
     id SERIAL PRIMARY KEY,

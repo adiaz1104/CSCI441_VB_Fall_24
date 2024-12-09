@@ -1,3 +1,7 @@
+//written by: Nathan Diaz and Cody Hinz
+//tested by: Nathan Diaz and Cody Hinz
+//debugged by: Nathan Diaz and Cody Hinz
+
 require('dotenv').config();  // Load environment variables from .env file
 const express = require('express');
 const db = require('./db');  // Import the database connection module

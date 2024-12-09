@@ -1,3 +1,7 @@
+//written by: Cody Hinz and Nathan Diaz
+//tested by: Cody Hinz and Nathan Diaz
+//debugged by: Cody Hinz and Nathan Diaz
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';

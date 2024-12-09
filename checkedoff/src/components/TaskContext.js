@@ -1,3 +1,7 @@
+//written by: Cody Hinz and Nathan Diaz
+//tested by: Cody Hinz and Nathan Diaz
+//debugged by: Cody Hinz and Nathan Diaz
+
 import React, { createContext, useState, useContext } from 'react';
 
 // Create context to share task state across components

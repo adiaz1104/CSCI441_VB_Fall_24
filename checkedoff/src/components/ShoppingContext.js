@@ -1,3 +1,7 @@
+//written by: Cody Hinz and Nathan Diaz
+//tested by: Cody Hinz and Nathan Diaz
+//debugged by: Cody Hinz and Nathan Diaz
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const ShoppingContext = createContext();
